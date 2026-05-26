@@ -1,0 +1,36 @@
+from src.preprocessing import load_data,preprocess_data,split_data
+from src.knn_model import train_knn_model
+from src.evaluate import evaluate_model
+
+
+# LOAD DATA
+
+df = load_data()
+
+# PREPROCESS DATA
+
+X, y, scaler, genre_encoder = preprocess_data(df)
+
+
+# SPLIT DATA
+
+X_train, X_test, y_train, y_test = split_data(X, y)
+
+# TRAIN MODEL
+
+model = train_knn_model(
+    X_train,
+    y_train
+)
+
+
+# EVALUATE MODEL
+
+metrics = evaluate_model(model, X_test, y_test)
+
+
+print('\nKNN Evaluation Metrics\n')
+
+for key, value in metrics.items():
+
+    print(f'{key} :\n{value}\n')
