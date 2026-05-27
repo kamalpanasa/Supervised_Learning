@@ -1,13 +1,10 @@
 from src.preprocessing import (
-
     load_data,
-
     preprocess_data,
-
     split_data
 )
 
-from decision_tree_model import (
+from src.decision_tree_model import (
     train_decision_tree
 )
 
@@ -44,22 +41,15 @@ model = train_decision_tree(
 # EVALUATE MODEL
 
 metrics = evaluate_model(
-
     model,
-
     X_test,
-
     y_test
 )
 
 
-print(
-    '\\nDecision Tree Metrics\\n'
-)
+print('\nDecision Tree Metrics\n')
 
 
 for key, value in metrics.items():
 
-    print(
-        f'{key} :\\n{value}\\n'
-    )
+    print(f'{key} :\n{value}\n')
