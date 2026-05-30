@@ -10,9 +10,7 @@ from sklearn.metrics import (
 
     confusion_matrix,
 
-    classification_report,
-
-    roc_auc_score
+    classification_report
 )
 
 
@@ -27,11 +25,6 @@ def evaluate_model(
 
     predictions = model.predict(
         X_test
-    )
-
-
-    probabilities = (
-        model.predict_proba(X_test)[:, 1]
     )
 
 
@@ -59,12 +52,6 @@ def evaluate_model(
     )
 
 
-    roc_auc = roc_auc_score(
-        y_test,
-        probabilities
-    )
-
-
     matrix = confusion_matrix(
         y_test,
         predictions
@@ -86,8 +73,6 @@ def evaluate_model(
         'Recall': recall,
 
         'F1 Score': f1,
-
-        'ROC-AUC': roc_auc,
 
         'Confusion Matrix': matrix,
 

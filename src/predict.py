@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 model_path = (
     BASE_DIR /
     'models' /
-    'random_forest_model.pkl'
+    'random_forest_classifier.pkl'
 )
 
 
@@ -20,13 +20,12 @@ model = joblib.load(
 )
 
 
-def predict_transaction(
-
-    transaction_data
+def predict_attack(
+    features
 ):
 
     data = np.array([
-        transaction_data
+        features
     ])
 
 

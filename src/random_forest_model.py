@@ -30,14 +30,13 @@ def train_random_forest(
     param_grid = {
 
         'n_estimators': [
-            100,
-            200
+            50,
+            100
         ],
 
         'max_depth': [
             10,
-            20,
-            None
+            20
         ],
 
         'min_samples_split': [
@@ -60,7 +59,17 @@ def train_random_forest(
 
         cv=3,
 
-        scoring='f1'
+        scoring='f1',
+
+        n_jobs=-1,
+
+        verbose=2
+    )
+
+
+    print(
+        'Training Started...',
+        flush=True
     )
 
 
@@ -70,33 +79,27 @@ def train_random_forest(
     )
 
 
+    print(
+        'Training Completed...',
+        flush=True
+    )
+
+
     best_model = (
         grid_search.best_estimator_
-    )
-
-
-    print(
-        '\\nBest Parameters:\\n'
-    )
-
-    print(
-        grid_search.best_params_
-    )
-
-
-    print(
-        '\\nBest F1 Score:\\n'
-    )
-
-    print(
-        grid_search.best_score_
     )
 
 
     model_path = (
         BASE_DIR /
         'models' /
-        'random_forest_model.pkl'
+        'random_forest_classifier.pkl'
+    )
+
+
+    model_path.parent.mkdir(
+        parents=True,
+        exist_ok=True
     )
 
 

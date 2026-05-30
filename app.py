@@ -2,28 +2,30 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from src.predict import predict_transaction
+from src.predict import (
+    predict_attack
+)
 
-# PAGE CONFIG
+
 st.set_page_config(
-    page_title='Credit Card Fraud Detection',
-    page_icon='💳',
+    page_title='Network Intrusion Detection',
+    page_icon='🛡️',
     layout='wide'
 )
 
-# HEADER
+
 st.title(
-    '💳 Credit Card Fraud Detection'
+    '🛡️ Network Intrusion Detection'
 )
 
 st.write(
     '''
-    Detect fraudulent credit card transactions
-    using Random Forest Classification.
+    Predict whether network traffic
+    is normal or anomalous using
+    Random Forest Classification.
     '''
 )
 
-# SIDEBAR
 
 st.sidebar.header(
     'Project Information'
@@ -31,73 +33,123 @@ st.sidebar.header(
 
 st.sidebar.info(
     '''
-    This application predicts whether
-    a transaction is fraudulent or legitimate.
+    Random Forest based
+    Network Intrusion Detection System.
     '''
 )
 
 
-# INPUT SECTION
-
 st.subheader(
-    'Transaction Details'
+    'Network Traffic Features'
 )
 
 
-amount = st.slider(
-    'Transaction Amount',
-    0.0,
-    5000.0,
-    100.0
-)
+col1, col2 = st.columns(2)
 
 
-time = st.slider(
-    'Transaction Time',
-    0,
-    200000,
-    50000
-)
+with col1:
 
-st.write(
-    '### PCA Features'
-)
+    duration = st.number_input(
+        'Duration',
+        value=0
+    )
 
-pca_features = []
-cols = st.columns(4)
+    src_bytes = st.number_input(
+        'Source Bytes',
+        value=0
+    )
 
-for i in range(1, 29):
-    with cols[(i - 1) % 4]:
-        value = st.number_input(
-            f'V{i}',
-            value=0.0,
-            format='%.4f'
-        )
-        pca_features.append(value)
+    dst_bytes = st.number_input(
+        'Destination Bytes',
+        value=0
+    )
 
-st.markdown('---')
+    count = st.number_input(
+        'Connection Count',
+        value=0
+    )
+
+    srv_count = st.number_input(
+        'Service Count',
+        value=0
+    )
 
 
-# PREDICTION
+with col2:
+
+    protocol_type = st.selectbox(
+        'Protocol Type',
+        [0, 1, 2]
+    )
+
+    service = st.number_input(
+        'Service',
+        value=0
+    )
+
+    flag = st.number_input(
+        'Flag',
+        value=0
+    )
+
+    same_srv_rate = st.slider(
+        'Same Service Rate',
+        0.0,
+        1.0,
+        0.5
+    )
+
+    diff_srv_rate = st.slider(
+        'Different Service Rate',
+        0.0,
+        1.0,
+        0.1
+    )
+
 
 if st.button(
-    'Detect Fraud',
-    use_container_width=True
+    'Predict Traffic'
 ):
 
-    transaction_data = [
+    features = [
 
-        time,
+        duration,
+        protocol_type,
+        service,
+        flag,
+        src_bytes,
+        dst_bytes,
 
-        *pca_features,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 
-        amount
+        count,
+        srv_count,
+
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+
+        same_srv_rate,
+        diff_srv_rate,
+
+        0.0,
+        0,
+        0,
+
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
     ]
 
 
     prediction, probability = (
-        predict_transaction(
-            transaction_data
+        predict_attack(
+            features
         )
     )
 
@@ -105,35 +157,55 @@ if st.button(
     if prediction == 1:
 
         st.error(
-            'Fraudulent Transaction Detected'
+            'Anomalous Traffic Detected'
         )
 
     else:
 
         st.success(
-            'Legitimate Transaction'
+            'Normal Traffic Detected'
         )
 
 
-    fraud_probability = (probability[1] * 100)
-    st.subheader('Fraud Probability')
-    st.progress(fraud_probability / 100)
-    st.write(f'{fraud_probability:.2f}% Fraud Risk')
+    anomaly_probability = (
+        probability[1] * 100
+    )
 
-    # VISUALIZATION
 
-    st.subheader('Transaction Overview')
+    st.subheader(
+        'Anomaly Probability'
+    )
+
+    st.progress(
+        anomaly_probability / 100
+    )
+
+    st.write(
+        f'{anomaly_probability:.2f}% Risk'
+    )
+
 
     graph_df = pd.DataFrame({
+
         'Feature': [
-            'Amount',
-            'Time'
+
+            'Source Bytes',
+
+            'Destination Bytes',
+
+            'Connections'
         ],
+
         'Value': [
-            amount,
-            time
+
+            src_bytes,
+
+            dst_bytes,
+
+            count
         ]
     })
+
 
     fig, ax = plt.subplots()
 
@@ -143,14 +215,7 @@ if st.button(
     )
 
     ax.set_title(
-        'Transaction Metrics'
+        'Traffic Analysis'
     )
 
     st.pyplot(fig)
-
-
-st.markdown('---')
-
-st.caption(
-    'Built using Streamlit, Random Forest Classification, and Scikit-learn.'
-)

@@ -2,8 +2,8 @@ from pathlib import Path
 
 import pandas as pd
 
-from sklearn.model_selection import (
-    train_test_split
+from sklearn.preprocessing import (
+    LabelEncoder
 )
 
 
@@ -12,48 +12,108 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 def load_data():
 
-    data_path = (
+    train_path = (
         BASE_DIR /
         'data' /
         'raw' /
-        'creditcard.csv'
+        'Train_data.csv'
     )
 
-    df = pd.read_csv(
-        data_path
-    )
-
-    return df
-
-
-def preprocess_data(df):
-
-    # FEATURES
-
-    X = df.drop(
-        columns=['Class']
+    test_path = (
+        BASE_DIR /
+        'data' /
+        'raw' /
+        'Test_data.csv'
     )
 
 
-    # TARGET
+    train_df = pd.read_csv(
+        train_path
+    )
 
-    y = df['Class']
+    test_df = pd.read_csv(
+        test_path
+    )
+
+    return train_df, test_df
 
 
-    return X, y
+def preprocess_data(
+    train_df,
+    test_df
+):
+
+    combined_df = pd.concat(
+        [train_df, test_df],
+        axis=0
+    )
 
 
-def split_data(X, y):
+    categorical_columns = [
 
-    return train_test_split(
+        'protocol_type',
 
-        X,
+        'service',
 
-        y,
+        'flag'
+    ]
 
-        test_size=0.2,
 
-        random_state=42,
+    encoder = LabelEncoder()
 
-        stratify=y
+
+    for col in categorical_columns:
+
+        combined_df[col] = (
+            encoder.fit_transform(
+                combined_df[col]
+            )
+        )
+
+
+        combined_df['class'] = (
+            combined_df['class']
+                .apply(
+                lambda x: 0 if x == 'normal' else 1
+            )
+        )
+
+
+    train_processed = (
+        combined_df.iloc[
+            :len(train_df)
+        ]
+    )
+
+
+    test_processed = (
+        combined_df.iloc[
+            len(train_df):
+        ]
+    )
+
+
+    X_train = train_processed.drop(
+        columns=['class']
+    )
+
+    y_train = train_processed['class']
+
+
+    X_test = test_processed.drop(
+        columns=['class']
+    )
+
+    y_test = test_processed['class']
+
+
+    return (
+
+        X_train,
+
+        X_test,
+
+        y_train,
+
+        y_test
     )
