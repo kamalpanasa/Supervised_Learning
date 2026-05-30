@@ -15,12 +15,23 @@ from src.preprocessing import (
 )
 
 
+import os
+from pathlib import Path
+
+def get_data():
+    # Get the directory where this script is located
+    base_dir = Path(__file__).parent
+    data_path = base_dir / "data" / "raw" / "train.csv"
+    df = load_data(str(data_path))
+    return df
+
+
 MODEL_PATH = "models/house_price_model.pkl"
 
 
 def train_model():
 
-    file_path = "data/raw/train.csv"
+    file_path = get_data()
 
     df = load_data(file_path)
 
