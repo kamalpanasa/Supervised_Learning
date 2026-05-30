@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 model_path = (
     BASE_DIR /
     'models' /
-    'random_forest_classifier.pkl'
+    'random_forest_model.pkl'
 )
 
 
