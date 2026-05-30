@@ -4,10 +4,6 @@ from sklearn.ensemble import (
     RandomForestRegressor
 )
 
-from sklearn.model_selection import (
-    GridSearchCV
-)
-
 import joblib
 
 
@@ -20,48 +16,18 @@ def train_random_forest_regressor(
 ):
 
     model = RandomForestRegressor(
-        random_state=42
-    )
 
+        n_estimators=20,
 
-    param_grid = {
+        max_depth=10,
 
-        'n_estimators': [
-            50,
-            100
-        ],
+        min_samples_split=5,
 
-        'max_depth': [
-            5,
-            10,
-            None
-        ],
+        min_samples_leaf=2,
 
-        'min_samples_split': [
-            2,
-            5
-        ],
+        random_state=42,
 
-        'min_samples_leaf': [
-            1,
-            2
-        ]
-    }
-
-
-    grid_search = GridSearchCV(
-
-        estimator=model,
-
-        param_grid=param_grid,
-
-        cv=3,
-
-        scoring='r2',
-
-        n_jobs=-1,
-
-        verbose=2
+        n_jobs=-1
     )
 
 
@@ -71,7 +37,7 @@ def train_random_forest_regressor(
     )
 
 
-    grid_search.fit(
+    model.fit(
         X_train,
         y_train
     )
@@ -83,29 +49,6 @@ def train_random_forest_regressor(
     )
 
 
-    best_model = (
-        grid_search.best_estimator_
-    )
-
-
-    print(
-        '\\nBest Parameters:\\n'
-    )
-
-    print(
-        grid_search.best_params_
-    )
-
-
-    print(
-        '\\nBest R2 Score:\\n'
-    )
-
-    print(
-        grid_search.best_score_
-    )
-
-
     model_path = (
         BASE_DIR /
         'models' /
@@ -113,10 +56,16 @@ def train_random_forest_regressor(
     )
 
 
+    model_path.parent.mkdir(
+        parents=True,
+        exist_ok=True
+    )
+
+
     joblib.dump(
-        best_model,
+        model,
         model_path
     )
 
 
-    return best_model
+    return model
