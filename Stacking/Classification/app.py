@@ -7,28 +7,23 @@ from src.predict import predict_loan_status
 from src.preprocessing import load_data
 
 
-# Page configuration
 st.set_page_config(
     page_title="Loan Approval Prediction",
     layout="wide"
 )
 
 
-# Load dataset
 @st.cache_data
 def get_data():
-
     df = load_data(
         "data/raw/train.csv"
     )
-
     return df
 
 
 df = get_data()
 
 
-# Sidebar
 st.sidebar.title("Navigation")
 
 page = st.sidebar.radio(
@@ -41,10 +36,6 @@ page = st.sidebar.radio(
     ]
 )
 
-
-# =====================================================
-# PROJECT OVERVIEW
-# =====================================================
 
 if page == "Project Overview":
 
@@ -75,13 +66,9 @@ if page == "Project Overview":
 
     st.subheader("Dataset Information")
 
-    st.write(f"Rows: {df.shape[0]}")
+    st.write(f"Rows: {df.shape}")
     st.write(f"Columns: {df.shape[1]}")
 
-
-# =====================================================
-# DATASET OVERVIEW
-# =====================================================
 
 elif page == "Dataset Overview":
 
@@ -98,17 +85,12 @@ elif page == "Dataset Overview":
     st.dataframe(df.isnull().sum())
 
 
-# =====================================================
-# VISUALIZATIONS
-# =====================================================
-
 elif page == "Visualizations":
 
     st.title("Data Visualizations")
 
     st.markdown("---")
 
-    # Loan Status Distribution
     st.subheader("Loan Status Distribution")
 
     fig, ax = plt.subplots(figsize=(6, 4))
@@ -121,7 +103,6 @@ elif page == "Visualizations":
 
     st.pyplot(fig)
 
-    # Gender Distribution
     st.subheader("Gender Distribution")
 
     fig, ax = plt.subplots(figsize=(6, 4))
@@ -134,7 +115,6 @@ elif page == "Visualizations":
 
     st.pyplot(fig)
 
-    # Education Distribution
     st.subheader("Education Distribution")
 
     fig, ax = plt.subplots(figsize=(6, 4))
@@ -147,7 +127,6 @@ elif page == "Visualizations":
 
     st.pyplot(fig)
 
-    # Applicant Income Distribution
     st.subheader("Applicant Income Distribution")
 
     fig, ax = plt.subplots(figsize=(7, 4))
@@ -160,7 +139,6 @@ elif page == "Visualizations":
 
     st.pyplot(fig)
 
-    # Loan Amount Distribution
     st.subheader("Loan Amount Distribution")
 
     fig, ax = plt.subplots(figsize=(7, 4))
@@ -173,7 +151,6 @@ elif page == "Visualizations":
 
     st.pyplot(fig)
 
-    # Correlation Heatmap
     st.subheader("Correlation Heatmap")
 
     numeric_df = df.select_dtypes(
@@ -190,10 +167,6 @@ elif page == "Visualizations":
 
     st.pyplot(fig)
 
-
-# =====================================================
-# PREDICTION
-# =====================================================
 
 elif page == "Loan Prediction":
 
@@ -269,7 +242,6 @@ elif page == "Loan Prediction":
     if st.button("Predict Loan Status"):
 
         input_data = {
-
             "Gender": gender,
             "Married": married,
             "Dependents": dependents,
