@@ -93,7 +93,7 @@ def train_random_forest(
     model_path = (
         BASE_DIR /
         'models' /
-        'random_forest_classifier.pkl'
+        'random_forest_model.pkl'
     )
 
 
