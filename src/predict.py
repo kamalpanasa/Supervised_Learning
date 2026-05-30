@@ -24,19 +24,18 @@ def predict_attack(
     features
 ):
 
-    data = np.array([
-        features
-    ])
+    import pandas as pd
 
+    data = pd.DataFrame(
+        [features]
+    )
 
     prediction = model.predict(
         data
     )
 
-
     probability = (
         model.predict_proba(data)
     )
-
 
     return prediction[0], probability[0]
