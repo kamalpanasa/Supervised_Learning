@@ -53,11 +53,33 @@ def preprocess_data(df):
             )
 
 
-    # FEATURES
+    # SELECT ONLY STREAMLIT FEATURES
 
-    X = df.drop(
-        columns=['price']
-    )
+    selected_features = [
+
+        'bedrooms',
+
+        'bathrooms',
+
+        'sqft_living',
+
+        'floors',
+
+        'waterfront',
+
+        'view',
+
+        'condition',
+
+        'grade',
+
+        'sqft_above',
+
+        'sqft_basement'
+    ]
+
+
+    X = df[selected_features]
 
 
     # TARGET
@@ -65,7 +87,7 @@ def preprocess_data(df):
     y = df['price']
 
 
-    # ENCODE CATEGORICAL FEATURES
+    # ENCODE CATEGORICAL FEATURES IF ANY
 
     encoder = LabelEncoder()
 
