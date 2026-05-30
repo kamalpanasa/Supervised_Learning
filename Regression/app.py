@@ -19,7 +19,7 @@ st.set_page_config(
 def get_data():
 
     df = load_data(
-        "data/raw/train.csv"
+        "/data/raw/train.csv"
     )
 
     return df
