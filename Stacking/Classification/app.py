@@ -16,7 +16,7 @@ st.set_page_config(
 @st.cache_data
 def get_data():
     df = load_data(
-        "Classification/data/raw/train.csv"
+        "Stacking/Classification/data/raw/train.csv"
     )
     return df
 
