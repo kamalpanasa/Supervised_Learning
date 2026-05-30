@@ -26,7 +26,7 @@ st.set_page_config(
 def get_data():
 
     df = load_data(
-        "data/raw/Telco-Customer-Churn.csv"
+        "Classification/data/raw/Telco-Customer-Churn.csv"
     )
 
     return df
