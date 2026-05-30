@@ -15,7 +15,7 @@ st.set_page_config(
 
 
 # Load dataset
-@st.cache_data
+
 def get_data():
 
     df = load_data(
